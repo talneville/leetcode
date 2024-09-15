@@ -57,3 +57,53 @@ public:
         return result;       
     }
 };
+
+
+/*
+
+CHAT_GPT_SOLUTION
+
+The difference between the two solutions lies in how they handle placing elements at the beginning of each permutation.
+
+First Solution: In the first solution, nums[i] is removed from the array, and the rest of the elements are permuted.
+After generating all the permutations of the remaining elements, nums[i] is added back to the front of each permutation. 
+This ensures that nums[i] is the first element in all the generated permutations for that iteration.
+
+Second Solution: In the second solution, instead of removing nums[i], it is swapped with the element at the first position.
+Then, the rest of the array (starting from the second element) is permuted. 
+This also results in nums[i] being the first element of the permutations. 
+However, rather than removing and reinserting, the swapping technique achieves the same effect more directly.
+
+In both approaches, nums[i] is made the first element of the permutations, but the second solution uses swapping 
+instead of removing and re-inserting, which is more efficient in terms of array manipulation.
+
+*/
+
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> result;
+        backtrack(nums, 0, result);
+        return result;
+    }
+
+private:
+    void backtrack(vector<int>& nums, int start, vector<vector<int>>& result) {
+        if (start == nums.size()) {
+            result.push_back(nums);  // Add current permutation to the result
+            return;
+        }
+
+        for (int i = start; i < nums.size(); i++) {
+            swap(nums[start], nums[i]);      // Swap to create a new permutation
+            backtrack(nums, start + 1, result);  // Recurse for the next element
+            swap(nums[start], nums[i]);      // Backtrack to restore original order
+        }
+    }
+};
